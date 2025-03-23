@@ -3,8 +3,17 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual Environments
+# Virtual Environment
 football-analysis-venv
+
+# Config file
+config.py
+
+# Dataset file
+football-players-detection-1
+
+# Training weights, labels, images
+runs
 
 # Distribution / packaging
 .Python
