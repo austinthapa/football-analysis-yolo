@@ -5,25 +5,25 @@
 ## Project Structure
 
 football-analysis-yolo/
-├── README.md
-├── requirements.txt
-├── .gitignore
 ├── LICENSE
-├── config.py # Configuration settings
-├── main.py # Main entry point
-├── yolo_inference.ipynb # Notebook for inference
-├── yolov9m.pt # YOLO model weights
-├── football-analysis-venv/ # Virtual environment
-├── football-players-detection-dataset/ # Dataset
-├── input_videos/
-│ └── input_video.mp4 # Source video
-├── output_videos/
-│ └── output.avi # Processed video
-├── models/ # Model configurations
-├── runs/ # Training runs
-└── utils/
-├── **init**.py
-└── video_utils.py # Video processing utilities
+├── README.md
+├── **pycache**
+│ └── config.cpython-311.pyc
+├── config.py
+├── input_videos
+│ └── input_video.mp4
+├── main.py
+├── models
+├── output_videos
+├── requirements.txt
+├── utils
+│ ├── **init**.py
+│ ├── **pycache**
+│ │ ├── **init**.cpython-311.pyc
+│ │ └── video_utils.cpython-311.pyc
+│ └── video_utils.py
+├── yolo_inference.ipynb
+└── yolov9m.pt
 
 ## Getting Started
 
