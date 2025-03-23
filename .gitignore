@@ -10,7 +10,7 @@ football-analysis-venv
 config.py
 
 # Dataset file
-football-players-detection-1
+football-players-detection-dataset
 
 # Training weights, labels, images
 runs
