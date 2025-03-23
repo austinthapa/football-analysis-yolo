@@ -4,26 +4,28 @@
 
 ## Project Structure
 
+```
 football-analysis-yolo/
 ├── LICENSE
 ├── README.md
-├── **pycache**
-│ └── config.cpython-311.pyc
+├── __pycache__
+│   └── config.cpython-311.pyc
 ├── config.py
 ├── input_videos
-│ └── input_video.mp4
+│   └── input_video.mp4
 ├── main.py
 ├── models
 ├── output_videos
 ├── requirements.txt
 ├── utils
-│ ├── **init**.py
-│ ├── **pycache**
-│ │ ├── **init**.cpython-311.pyc
-│ │ └── video_utils.cpython-311.pyc
-│ └── video_utils.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-311.pyc
+│   │   └── video_utils.cpython-311.pyc
+│   └── video_utils.py
 ├── yolo_inference.ipynb
 └── yolov9m.pt
+```
 
 ## Getting Started
 
