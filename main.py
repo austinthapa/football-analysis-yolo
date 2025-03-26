@@ -11,9 +11,12 @@ def main():
     model_path = '/Users/anilthapa/football-analysis-yolo/models/best.pt'
     tracker = Tracker(model_path)
     tracks = tracker.get_object_track(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/tracks_stub.pkl')
-    print(tracks['players'][5][1])
+    
+    # Draw annotations 
+    output_video_frames = tracker.draw_annotations(video_frames, tracks)
+    
     # Save video
-    save_video(video_frames, '/Users/anilthapa/football-analysis-yolo/output_videos/output.avi')
+    save_video(output_video_frames, '/Users/anilthapa/football-analysis-yolo/output_videos/output.avi')
 
 if __name__ == "__main__":
     main()
