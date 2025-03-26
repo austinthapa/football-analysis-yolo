@@ -1,9 +1,13 @@
 import os
+import sys
 import pickle
 import cv2 as cv
 import supervision as sv
 
 from ultralytics import YOLO
+
+sys.path.append('../')
+from utils import get_center_bbox, get_width_bbox
 
 class Tracker:
     def __init__(self, model_path):
@@ -11,15 +15,16 @@ class Tracker:
         self.tracker = sv.ByteTrack()
         
     def detect_frames(self, frames):
-        batch_size = 16             
+        batch_size = 5            
         detections = []      
         for i in range(0, len(frames), batch_size):
-            detection = self.model.predict(frames[i:i+batch_size])
-            detections.append(detection)
+            detection_batch = self.model.predict(frames[i:i+batch_size])
+            detections += detection_batch
+            
+        print('This is the len of detections', len(detections))
         return detections
     
-    def get_object_track(self, frames, read_from_stub = False, stub_path = None):
-        
+    def get_object_track(self, frames, read_from_stub = False, stub_path = None):      
         # Read from pickle if it already exists
         if read_from_stub and stub_path is not None:
             if os.path.exists(stub_path):
@@ -33,22 +38,26 @@ class Tracker:
 
         detections = self.detect_frames(frames)
         tracks = {
-            'players': [{}] * len(detections[0]), 
-            'refrees': [{}] * len(detections[0]), 
-            'football': [{}] * len(detections[0]), 
-            'goalkeeper': [{}] * len(detections[0]), 
+            'players': [],
+            'referees': [],
+            'football': [],
+            'goalkeeper': [],
         }
-        # Ensure that tracks list have at least one empty dictionary to begin with otherwise index error
         
         
-        detections = detections[0]
         for frame_num, frame in enumerate(detections):
-
+            
             # Detection with supervision
             detection_sv = sv.Detections.from_ultralytics(frame)
             
             # Track objects
+            # Ensure that tracks list have at least one empty dictionary to begin with otherwise index error
             detection_with_tracks = self.tracker.update_with_detections(detection_sv)
+            tracks["players"].append({})
+            tracks["referees"].append({})
+            tracks["football"].append({})
+            tracks['goalkeeper'].append({})
+            
             for frame_detection in detection_with_tracks:
                 bbox = frame_detection[0].tolist()
                 track_id = frame_detection[4]
@@ -56,7 +65,7 @@ class Tracker:
                 if class_name == 'player':
                     tracks['players'][frame_num][track_id] = {'bbox': bbox}
                 if class_name == 'refree':
-                    tracks['refrees'][frame_num][track_id] = {'bbox': bbox}
+                    tracks['referees'][frame_num][track_id] = {'bbox': bbox}
                 if class_name == 'goalkeeper':
                     tracks['goalkeeper'][frame_num][track_id] = {'bbox': bbox}
                 if class_name == 'football':
@@ -69,3 +78,50 @@ class Tracker:
                 return tracks
         except IOError as e:
             print(f'Error saving the file {stub_path}: ')
+            
+    def draw_ellipse(self, frame, bbox, color, track_id):
+        x_center, _ = get_center_bbox(bbox)
+        width = get_width_bbox(bbox)
+        y2 = bbox[3]
+        
+        # Draw an ellipse
+        cv.ellipse(frame,
+                   center=(x_center, y2),
+                   axes=(int(width), int(0.35 * width)),
+                   angle=0.0,
+                   startAngle=-45,
+                   endAngle=245,
+                   color=color,
+                   lineType=cv.LINE_4)
+        
+        return frame
+    
+    def draw_annotations(self, video_frames, tracks):
+        output_video_frames = []
+        for frame_num, frame in enumerate(video_frames):
+            frame = frame.copy()
+            players_dict = tracks['players'][frame_num]
+            #referees_dict = tracks['referees'][frame_num]
+            football_dict = tracks['football'][frame_num]
+            goalkeeper_dict = tracks['goalkeeper'][frame_num]
+            
+            # Draw the players
+            for track_id, player in players_dict.items():
+                frame = self.draw_ellipse(frame, player['bbox'], (0,0,255), track_id)
+                
+            # Draw the refreees
+            #for track_id, referee in referees_dict.items():
+                #frame = self.draw_ellipse(frame, referee['bbox'], (0, 255, 255), track_id)
+                
+            # Draw the goalkeeper
+            for track_id, goalkeeper in goalkeeper_dict.items():
+                frame = self.draw_ellipse(frame, goalkeeper['bbox'], (255, 0, 0), track_id)
+                
+            # Draw the football
+            for track_id, football in football_dict.items():
+                frame = self.draw_ellipse(frame, football['bbox'], (255, 255, 255), track_id)
+            
+            # Append the annotated frames into ouput video frames
+            output_video_frames.append(frame)
+            
+        return output_video_frames
