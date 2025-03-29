@@ -3,6 +3,7 @@ import sys
 import pickle
 import cv2 as cv
 import supervision as sv
+import numpy as np
 
 from ultralytics import YOLO
 
@@ -15,13 +16,12 @@ class Tracker:
         self.tracker = sv.ByteTrack()
         
     def detect_frames(self, frames):
-        batch_size = 5            
+        batch_size = 16
         detections = []      
         for i in range(0, len(frames), batch_size):
             detection_batch = self.model.predict(frames[i:i+batch_size])
             detections += detection_batch
             
-        print('This is the len of detections', len(detections))
         return detections
     
     def get_object_track(self, frames, read_from_stub = False, stub_path = None):      
@@ -40,7 +40,7 @@ class Tracker:
         tracks = {
             'players': [],
             'referees': [],
-            'football': [],
+            'ball': [],
             'goalkeeper': [],
         }
         
@@ -55,7 +55,7 @@ class Tracker:
             detection_with_tracks = self.tracker.update_with_detections(detection_sv)
             tracks["players"].append({})
             tracks["referees"].append({})
-            tracks["football"].append({})
+            tracks["ball"].append({})
             tracks['goalkeeper'].append({})
             
             for frame_detection in detection_with_tracks:
@@ -70,7 +70,6 @@ class Tracker:
                     tracks['goalkeeper'][frame_num][track_id] = {'bbox': bbox}
                 if class_name == 'football':
                     tracks['football'][frame_num][track_id] = {'bbox': bbox}
-        print(tracks)
         try:
             if stub_path is not None:
                 with open(stub_path, 'wb') as file:
@@ -80,6 +79,8 @@ class Tracker:
             print(f'Error saving the file {stub_path}: ')
             
     def draw_ellipse(self, frame, bbox, color, track_id):
+        
+        # Ellipse parameters
         x_center, _ = get_center_bbox(bbox)
         width = get_width_bbox(bbox)
         y2 = bbox[3]
@@ -94,7 +95,52 @@ class Tracker:
                    color=color,
                    lineType=cv.LINE_4)
         
+        # Rectangle Parameters
+        rect_width = 20
+        rect_height = 10
+        x1_rect = x_center - rect_width // 2
+        x2_rect = x_center + rect_width // 2
+        
+        y1_rect = (y2 - rect_height //2) + 10
+        y2_rect = (y2 + rect_height // 2) + 10
+        
+        if track_id is not None:
+            cv.rectangle(
+                frame, 
+                (int(x1_rect), int(y1_rect)),
+                (int(x2_rect), int(y2_rect)),
+                color,
+                cv.FILLED
+            )
+            
+            x1_text = x1_rect + 5
+            if track_id > 99:
+                x1_text -= 10
+                
+            cv.putText(
+                frame,
+                f'{track_id}', 
+                (int(x1_text), int(y1_rect+8)),
+                cv.FONT_HERSHEY_COMPLEX,
+                0.5,
+                (0,0,0),
+                1
+            )
+             
+    
         return frame
+
+    def draw_triangle(self, frame, bbox, color):
+        y = int(bbox[1])
+        x, _ = get_center_bbox(bbox)
+        
+        triangle_points = np.array([
+            [x, y],
+            [x-10, y-20],
+            [x+10, y-20]
+        ])
+        cv.drawContours(frame, [triangle_points], 0, color, cv.FILLED)
+        cv.drawContours(frame, [triangle_points], 0, (0, 0, 0), 2)
     
     def draw_annotations(self, video_frames, tracks):
         output_video_frames = []
@@ -104,7 +150,7 @@ class Tracker:
             frame = frame.copy()
             players_dict = tracks['players'][frame_num]
             referees_dict = tracks['referees'][frame_num]
-            football_dict = tracks['football'][frame_num]
+            football_dict = tracks['ball'][frame_num]
             goalkeeper_dict = tracks['goalkeeper'][frame_num]
             
             # Draw the players
@@ -117,11 +163,11 @@ class Tracker:
                 
             # Draw the goalkeeper
             for track_id, goalkeeper in goalkeeper_dict.items():
-                frame = self.draw_ellipse(frame, goalkeeper['bbox'], (255, 0, 0), track_id)
+                frame = self.draw_ellipse(frame, goalkeeper['bbox'], (255, 255, 0), track_id)
                 
             # Draw the football
             for track_id, football in football_dict.items():
-                frame = self.draw_ellipse(frame, football['bbox'], (255, 255, 255), track_id)
+                frame = self.draw_triangle(frame, football['bbox'], (0, 255, 0))
             
             # Append the annotated frames into ouput video frames
             output_video_frames.append(frame)
