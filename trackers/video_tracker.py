@@ -64,7 +64,7 @@ class Tracker:
                 class_name = frame_detection[5]['class_name']
                 if class_name == 'player':
                     tracks['players'][frame_num][track_id] = {'bbox': bbox}
-                if class_name == 'refree':
+                if class_name == 'referee':
                     tracks['referees'][frame_num][track_id] = {'bbox': bbox}
                 if class_name == 'goalkeeper':
                     tracks['goalkeeper'][frame_num][track_id] = {'bbox': bbox}
@@ -86,7 +86,7 @@ class Tracker:
         
         # Draw an ellipse
         cv.ellipse(frame,
-                   center=(x_center, y2),
+                   center=(int(x_center), int(y2)),
                    axes=(int(width), int(0.35 * width)),
                    angle=0.0,
                    startAngle=-45,
@@ -98,10 +98,12 @@ class Tracker:
     
     def draw_annotations(self, video_frames, tracks):
         output_video_frames = []
+        
+        # Loop through the frame to draw the annotations around the players
         for frame_num, frame in enumerate(video_frames):
             frame = frame.copy()
             players_dict = tracks['players'][frame_num]
-            #referees_dict = tracks['referees'][frame_num]
+            referees_dict = tracks['referees'][frame_num]
             football_dict = tracks['football'][frame_num]
             goalkeeper_dict = tracks['goalkeeper'][frame_num]
             
@@ -110,8 +112,8 @@ class Tracker:
                 frame = self.draw_ellipse(frame, player['bbox'], (0,0,255), track_id)
                 
             # Draw the refreees
-            #for track_id, referee in referees_dict.items():
-                #frame = self.draw_ellipse(frame, referee['bbox'], (0, 255, 255), track_id)
+            for track_id, referee in referees_dict.items():
+                frame = self.draw_ellipse(frame, referee['bbox'], (0, 255, 255), track_id)
                 
             # Draw the goalkeeper
             for track_id, goalkeeper in goalkeeper_dict.items():
