@@ -164,7 +164,8 @@ class Tracker:
                 
             # Draw the players
             for track_id, player in players_dict.items():
-                frame = self.draw_ellipse(frame, player['bbox'], (0,0,255), track_id)
+                color = player.get('team_color', (0, 0, 255))
+                frame = self.draw_ellipse(frame, player['bbox'], color, track_id)
                 
             # Draw the refreees
             for track_id, referee in referees_dict.items():
@@ -180,5 +181,4 @@ class Tracker:
             
             # Append the annotated frames into ouput video frames
             output_video_frames.append(frame)
-            
         return output_video_frames
