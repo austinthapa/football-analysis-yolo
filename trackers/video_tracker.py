@@ -142,9 +142,9 @@ class Tracker:
         x, _ = get_center_bbox(bbox)
         
         triangle_points = np.array([
-            [x, y],
-            [x-10, y-20],
-            [x+10, y-20]
+            [[x, y]],
+            [[x-10, y-20]],
+            [[x+10, y-20]]
         ])
         
         cv.fillPoly(frame, [triangle_points], color)
