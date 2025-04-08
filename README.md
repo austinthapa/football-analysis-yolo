@@ -5,26 +5,36 @@
 ## Project Structure
 
 ```
-football-analysis-yolo/
+.
 ├── LICENSE
-├── README.md
-├── __pycache__
-│   └── config.cpython-311.pyc
-├── config.py
+├── README.md                   # Read me
+├── analysis                    # Notebook to process
+│   └── player_team_color_assignment.ipynb
+├── config.py                   # Store API Key
+├── documentation.txt           # Documentation for
 ├── input_videos
-│   └── input_video.mp4
-├── main.py
-├── models
-├── output_videos
-├── requirements.txt
-├── utils
+│   └── input_video.mp4         #
+├── main.py                     # Entry Point
+├── models                      # Best weights from trained YOLOv9 model
+│   └── best.pt
+├── output_videos               # Store the processed video frames
+│   ├── cropped_img.jpg
+│   └── output.avi
+├── requirements.txt            # Dependencies and Requirements
+├── stubs
+│   └── tracks_stub_long.pkl
+├── team_assigner               # Assign player to a team
 │   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-311.pyc
-│   │   └── video_utils.cpython-311.pyc
-│   └── video_utils.py
-├── yolo_inference.ipynb
-└── yolov9m.pt
+│   └── team_assigner.py
+├── trackers                    # Run Tracker on each frame for players
+│   ├── __init__.py
+│   └── video_tracker.py
+├── utils                       # Utilities for bounding box operations
+│   ├── __init__.py
+│   ├── bbox_utils.py           #
+│   └── video_utils.py          #
+├── yolo_inference_final.ipynb  # Fine-tune YOLO model on subset of Football image datasets
+└── yolov9m.pt                  # Original YOLOv9 medium model
 ```
 
 ## Getting Started
