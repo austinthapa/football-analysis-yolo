@@ -10,3 +10,11 @@ def get_center_bbox(bbox):
 def get_width_bbox(bbox):
     x1, x2 = bbox[0], bbox[2]
     return x2 - x1
+
+# Return the distance between two points
+def measure_distance(p1, p2):
+    return ((p2[0]- p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
+
+# Measure the x &  y movement between two points
+def measure_x_y_distance(p1, p2):
+    return (p2[0] - p1[0]), (p2[1] - p1[1])
