@@ -2,6 +2,7 @@ import cv2 as cv
 from utils import read_video, save_video
 from trackers import Tracker
 from team_assigner import TeamAssigner
+from camera_movement_estimator import CameraMovementEstimator
 
 def main():
     
@@ -12,8 +13,13 @@ def main():
     # Initialize the Tracker
     model_path = '/Users/anilthapa/football-analysis-yolo/models/best.pt'
     tracker = Tracker(model_path)
-    tracks = tracker.get_object_track(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/tracks_stub_long.pkl')
+    tracks = tracker.get_object_track(video_frames, read_from_stub=False, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/tracks_stub_long.pkl')
     
+    # Camera movement estimator
+    camera_movement_estimator = CameraMovementEstimator(video_frames[0])
+    camera_movement_per_frame = camera_movement_estimator.get_camera_movement(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/camera_movement_stub.pkl')
+    
+
     # Assign Players team
     team_assigner = TeamAssigner()
     team_assigner.assign_team_color(video_frames[0], tracks['player'][0])
@@ -26,6 +32,9 @@ def main():
             
     # Draw annotations 
     output_video_frames = tracker.draw_annotations(video_frames, tracks)
+    
+    # Draw camera movement:
+    output_video_frames = camera_movement_estimator.draw_camera_movement(output_video_frames, camera_movement_per_frame)
     
     # Save video
     save_video(output_video_frames, '/Users/anilthapa/football-analysis-yolo/output_videos/output.avi')
