@@ -3,6 +3,7 @@ from utils import read_video, save_video
 from trackers import Tracker
 from team_assigner import TeamAssigner
 from camera_movement_estimator import CameraMovementEstimator
+from perspective_transformer import PerspectiveTransformer
 
 def main():
     
@@ -16,9 +17,12 @@ def main():
     tracks = tracker.get_object_track(video_frames, read_from_stub=False, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/tracks_stub_long.pkl')
     
     # Camera movement estimator
-    camera_movement_estimator = CameraMovementEstimator(video_frames[0])
-    camera_movement_per_frame = camera_movement_estimator.get_camera_movement(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/camera_movement_stub.pkl')
+    camera_movement_estimator = CameraMovementEstimator(video_frames)
+    camera_movement_per_frame = camera_movement_estimator.get_camera_movement(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/camera_movement_stub_short.pkl')
     
+    # Perspective Transformer
+    perspective_transformer = PerspectiveTransformer()
+    perspective_transformer.add_transformed_point_to_tracks(tracks)
 
     # Assign Players team
     team_assigner = TeamAssigner()
