@@ -86,7 +86,7 @@ class CameraMovementEstimator:
             overlay = frame.copy()
             
             # Draw a  semi-rectange on the top left
-            cv.rectangle(overlay, (0, 0), (500, 100), (255, 255, 255), -1)
+            cv.rectangle(overlay, (20, 20), (500, 120), (255, 255, 255), -1)
             alpha = 0.6
             frame = cv.addWeighted(overlay, alpha, frame, 1-alpha, 0)
             
@@ -94,8 +94,8 @@ class CameraMovementEstimator:
             x_movement, y_movement = camera_movement[frame_num]
             
             # Put the text inside the rectangle
-            cv.putText(frame, f'Camera X movement: {x_movement:.2f}',(10, 30), cv.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 0), 2)
-            cv.putText(frame, f'Camera Y movement: {y_movement:.2f}', (20, 30), cv.FONT_HERSHEY_PLAIN, 1.5, (0, 0, 0), 2)
+            cv.putText(frame, f'Camera X movement: {x_movement:.2f}',(20, 50), cv.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 2)
+            cv.putText(frame, f'Camera Y movement: {y_movement:.2f}', (20, 90), cv.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 2)
             
             output_frames.append(frame)            
             
