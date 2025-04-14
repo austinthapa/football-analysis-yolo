@@ -79,6 +79,9 @@ class CameraMovementEstimator:
     def draw_output_frames(self, frames, camera_movement):
         output_frames = []
         for frame_num, frame in enumerate(frames):
+            if frame is None:
+                print(f"[Warning] Frame {frame_num} is None, skipping.")
+                continue
             frame = frame.copy()
             overlay = frame.copy()
             
