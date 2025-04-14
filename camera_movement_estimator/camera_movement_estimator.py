@@ -23,7 +23,7 @@ class CameraMovementEstimator:
             mask = mask_features
         )
         self.lk_params = dict(
-            windowSize = 15, 
+            winSize = (15, 15), 
             maxLevel = 2, 
             criteria = (cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT, 10, 0.3)
         )
@@ -37,12 +37,12 @@ class CameraMovementEstimator:
                 try:
                     with open(stub_path, 'rb') as file:
                         camera_movement = pickle.load(file)
-                    return cm
+                    return camera_movement
                 except (FileExistsError, pickle.UnpicklingError) as e:
                     print(f'Error loading file at: {stub_path}: {e}')
                     return None
                 
-        camera_movement = [[0, 0] * len(frames)]
+        camera_movement = [[0, 0] for _ in range(len(frames))]
         old_frame_gray = cv.cvtColor(frames[0], cv.COLOR_BGR2GRAY)
         old_features = cv.goodFeaturesToTrack(old_frame_gray, **self.features_to_track)
         
@@ -52,7 +52,7 @@ class CameraMovementEstimator:
             new_features, status, _ = cv.calcOpticalFlowPyrLK(old_frame_gray, new_frame_gray, old_features, None, **self.lk_params)
             max_distance = 0
             
-            x_movement, y_movement = 0, 0
+            camera_movement_x, camera_movement_y = 0, 0
             for (old_feature, new_feature) in zip(old_features, new_features):
                 old_feature_point = old_feature.ravel()
                 new_feature_point = new_feature.ravel()
