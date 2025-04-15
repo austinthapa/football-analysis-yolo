@@ -14,11 +14,13 @@ def main():
     # Initialize the Tracker
     model_path = '/Users/anilthapa/football-analysis-yolo/models/best.pt'
     tracker = Tracker(model_path)
-    tracks = tracker.get_object_track(video_frames, read_from_stub=False, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/tracks_stub_long.pkl')
+    tracks = tracker.get_object_track(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/tracks_stub_short.pkl')
+    tracker.add_position_to_tracks(tracks)
     
     # Camera movement estimator
     camera_movement_estimator = CameraMovementEstimator(video_frames)
     camera_movement_per_frame = camera_movement_estimator.get_camera_movement(video_frames, read_from_stub=True, stub_path='/Users/anilthapa/football-analysis-yolo/stubs/camera_movement_stub_short.pkl')
+    camera_movement_estimator.adjust_positions_to_tracks(tracks, camera_movement_per_frame)
     
     # Perspective Transformer
     perspective_transformer = PerspectiveTransformer()

@@ -36,4 +36,4 @@ class PerspectiveTransformer:
                     position_transformed = self.transform_point(position)
                     if position_transformed is not None:
                         position_transformed = position_transformed.squeeze().tolist()
-                    track[object][frame_num][track_id]['position_transformed'] = position_transformed
+                    track[track_id]['position_transformed'] = position_transformed

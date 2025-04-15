@@ -8,7 +8,7 @@ import numpy as np
 from ultralytics import YOLO
 
 sys.path.append('../')
-from utils import get_center_bbox, get_width_bbox
+from utils import get_center_bbox, get_width_bbox, get_foot_position
 
 class Tracker:
     def __init__(self, model_path):
@@ -82,6 +82,17 @@ class Tracker:
         except IOError as e:
             print(f'Error saving the file {stub_path}: ')
     
+    def add_position_to_tracks(self, tracks):
+        for object, object_tracks in tracks.items():
+            for frame_num, track in enumerate(object_tracks):
+                for track_id, track_info in track.items():
+                    bbox = track_info['bbox']
+                    if object == 'football':
+                        position = get_center_bbox(bbox)
+                    else:
+                        position = get_foot_position(bbox)
+                    tracks[object][frame_num][track_id]['position']= position
+                    
     # Draw the ellipse at the bottom of bounding box with tracker id for each player
     def draw_ellipse(self, frame, bbox, color, track_id):
         

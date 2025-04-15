@@ -18,3 +18,8 @@ def measure_distance(p1, p2):
 # Measure the x &  y movement between two points
 def measure_x_y_distance(p1, p2):
     return (p2[0] - p1[0]), (p2[1] - p1[1])
+
+# Get the foot position of bbox
+def get_foot_position(bbox):
+    x1, y1, x2, y2 = bbox
+    return int((x1+x2)/2), int(y2)
