@@ -24,6 +24,10 @@ def main():
     perspective_transformer = PerspectiveTransformer()
     perspective_transformer.add_transformed_point_to_tracks(tracks)
 
+    # Calculate player metrics
+    player_metrics  = PlayerMetrics()
+    player_metrics.add_speed_and_distance_to_tracks(tracks)
+
     # Assign Players team
     team_assigner = TeamAssigner()
     team_assigner.assign_team_color(video_frames[0], tracks['player'][0])
@@ -38,7 +42,10 @@ def main():
     output_video_frames = tracker.draw_annotations(video_frames, tracks)
     
     # Draw camera movement:
-    output_video_frames = camera_movement_estimator.draw_camera_movement(output_video_frames, camera_movement_per_frame)
+    output_video_frames = camera_movement_estimator.draw_output_frames(output_video_frames, camera_movement_per_frame)
+    
+    # Draw Speed and Distance
+    output_video_frames = player_metrics.draw_speed_and_distance(output_video_frames, tracks)
     
     # Save video
     save_video(output_video_frames, '/Users/anilthapa/football-analysis-yolo/output_videos/output.avi')
