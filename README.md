@@ -1,28 +1,34 @@
 # Football Analysis Using YOLO
 
 ## Description
-This project leverages YOLOv9, OpenCV, and tracking algorithms to detect football players, assign them to their respective teams based on jersey color, and generate processed output videos. It includes video processing, player tracking, and color-based team assignment – all wrapped in a modular, production-ready structure.
+This project presents a modular, end-to-end computer vision pipeline for analyzing football videos using YOLOv11, OpenCV, and advanced tracking algorithms. The system performs player detection, assigns team identities using jersey color clustering, estimates player speed and distance, and maps player movements onto a static top-down view of the football field through perspective transformation. It produces processed output videos with rich visualizations, enabling insights into match dynamics, all built in a clean, well-defined structure
+
+---
+
+### 📽 Demo
+<img src="output_videos/output.gif" alt="Demo GIF" width="600"/>
+
+---
 
 ## Project Structure
 ```
 .
 ├── LICENSE
-├── README.md                   # Read me
-├── analysis                    # Notebook to process
+├── README.md                   # Documentation
+├── analysis                    # Notebook to get player jersey color
 │   └── player_team_color_assignment.ipynb
-├── config.py                   # Store API Key
-├── documentation.txt           # Documentation for
+├── config.py                   # Store API Key for RoboFlow API
 ├── input_videos
-│   └── input_video.mp4         #
+│   └── input_video.mp4         
 ├── main.py                     # Entry Point
-├── models                      # Best weights from trained YOLOv9 model
+├── models                      # Best weights from trained YOLOv11 model
 │   └── best.pt
-├── output_videos               # Store the processed video frames
+├── output_videos               # Store the processed video frames & pictures
 │   ├── cropped_img.jpg
 │   └── output.avi
 ├── requirements.txt            # Dependencies and Requirements
 ├── stubs
-│   └── tracks_stub_long.pkl
+│   └── tracks_stub_long.pkl    # Store trackers to avoid re-running everytime
 ├── team_assigner               # Assign player to a team
 │   ├── __init__.py
 │   └── team_assigner.py
@@ -31,34 +37,101 @@ This project leverages YOLOv9, OpenCV, and tracking algorithms to detect footbal
 │   └── video_tracker.py
 ├── utils                       # Utilities for bounding box operations
 │   ├── __init__.py
-│   ├── bbox_utils.py           #
-│   └── video_utils.py          #
+│   ├── bbox_utils.py           
+│   └── video_utils.py          
 ├── yolo_inference_final.ipynb  # Fine-tune YOLO model on subset of Football image datasets
-└── yolov9m.pt                  # Original YOLOv9 medium model
+└── yolov11.pt                  # Original YOLOv11 medium model
 ```
-
-## Getting Started
-
-### Dependencies
-
-### Installing
+---
 
 ##  Features
 
-- Fine-tuned YOLOv11 for football player detection
-- Real-time player tracking and ID consistency across frames
-- Automatic team assignment via dominant color detection
-- Output video generation with overlays and team labels
+-  **Object Detection**: Uses fine-tuned YOLOv11 to detect players, referees, and the ball.
+-  **Tracking**: Assigns consistent IDs across frames using supervised trackers.
+-  **Team Identification**: Uses k-means clustering to auto-assign players to teams based on jersey colors.
+-  **Perspective Transform**: Converts the dynamic camera view to a static top-down view.
+-  **Player Metrics**: Calculates real-time speed, distance, and movement patterns.
+-  **Model Evaluation**: Evaluated using mAP@0.5 and mAP@0.5:0.95 metrics.
 
-##  Setup
+---
+
+## 🛠️ Technologies Used
+
+- [YOLOv11](https://github.com/WongKinYiu/yolov7)
+- [OpenCV](https://opencv.org/)
+- [Python](https://www.python.org/)
+- [Roboflow](https://roboflow.com/)
+- [Scikit-learn (k-means clustering)](https://scikit-learn.org/)
+- [NumPy](https://numpy.org/)
+
+---
+
+##  Setup Instructions
+
+1. **Clone the Repository**
 
 ```bash
 git clone https://github.com/austinthapa/football-analysis-yolo.git
 cd football-analysis-yolo
+````
+
+2. **Create a Virtual Environment**
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+```
+
+3. **Install Requirements**
+
+```bash
 pip install -r requirements.txt
 ```
-## Authors
-Austin Thapa
 
-## License
-MIT License
+4. **Download YOLOv11 Weights from training notebook**
+
+Put the `best.pt` model inside the `models/` directory.
+
+5. **Run the Pipeline**
+
+```bash
+python main.py
+```
+
+---
+
+##  Results
+
+*  High accuracy in player detection and tracking.
+*  Real-time distance and speed metrics rendered on the video.
+*  Challenges with detecting the ball due to motion blur and occlusion.
+*  Limitations with memory on non-GPU devices.
+
+---
+
+
+##  Limitations
+
+*  Limited real-time capability on non-GPU machines.
+*  Ball detection is less reliable.
+*  Model performance constrained by dataset quality and size.
+
+##  Future Directions
+
+* Improve ball tracking with interpolation techniques.
+* Extend to real-time live-stream processing.
+* Add tactical heatmap generation and pass-mapping.
+
+---
+
+##  Author
+
+**Anil Thapa**
+
+---
+
+##  License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
