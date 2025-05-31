@@ -9,8 +9,8 @@ football-analysis-venv
 # Config file
 config.py
 
-# Documentation file
-documentation.txt
+# Output videos
+output_videos
 
 # Dataset file
 football-players-detection-dataset
