@@ -69,8 +69,8 @@ class PlayerMetrics:
                     position[1] += 40
                     position = tuple(map(int, position))
 
-                    cv.putText(frame, f'Speed: {speed:.2f} m/s', position, cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    cv.putText(frame, f'Speed: {speed:.2f} m/s', position, cv.FONT_HERSHEY_SIMPLEX, 0.3, (255, 255, 255), 2)
                     position_distance = (position[0], position[1] + 20)
-                    cv.putText(frame, f'Distance: {distance:.2f} meters', position_distance, cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    cv.putText(frame, f'Distance: {distance:.2f} meters', position_distance, cv.FONT_HERSHEY_SIMPLEX, 0.3, (255, 255, 255), 2)
             output_frames.append(frame)
         return output_frames
