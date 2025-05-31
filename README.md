@@ -6,7 +6,7 @@ This project presents a modular, end-to-end computer vision pipeline for analyzi
 ---
 
 ## Demo
-
+![Demo of Player Tracking](output.gif)
 
 ---
 
