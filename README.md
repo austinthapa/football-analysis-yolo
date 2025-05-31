@@ -1,9 +1,9 @@
 # Football Analysis Using YOLO
 
 ## Description
+This project leverages YOLOv9, OpenCV, and tracking algorithms to detect football players, assign them to their respective teams based on jersey color, and generate processed output videos. It includes video processing, player tracking, and color-based team assignment – all wrapped in a modular, production-ready structure.
 
 ## Project Structure
-
 ```
 .
 ├── LICENSE
@@ -43,32 +43,22 @@
 
 ### Installing
 
-## Help
+##  Features
 
+- Fine-tuned YOLOv11 for football player detection
+- Real-time player tracking and ID consistency across frames
+- Automatic team assignment via dominant color detection
+- Output video generation with overlays and team labels
+
+##  Setup
+
+```bash
+git clone https://github.com/austinthapa/football-analysis-yolo.git
+cd football-analysis-yolo
+pip install -r requirements.txt
+```
 ## Authors
+Austin Thapa
 
 ## License
-
-## Acknowledegments
-
-Football Analysis Project using OpenCV, YOLO
-
-numpy
-pandas
-scikit-learn
-
-opencv-python
-ultralytics
-roboflow
-supervision
-
-ultralytics require numpy<=2.1.1 and numpy>=1.23.0
-ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-ultralytics 8.3.94 requires numpy<=2.1.1,>=1.23.0, but you have numpy 2.2.4 which is incompatible.
-
-YOLOv8 vs YOLOv9: Which one to choose for football detection?
-YOLOv8
-
-- It has specific improvements for small object detection (useful for distant players and the ball)
-
-YOLOv9
+MIT License
