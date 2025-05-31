@@ -1,12 +1,12 @@
 # Football Analysis Using YOLO
 
 ## Description
-This project presents a modular, end-to-end computer vision pipeline for analyzing football videos using YOLOv11, OpenCV, and advanced tracking algorithms. The system performs player detection, assigns team identities using jersey color clustering, estimates player speed and distance, and maps player movements onto a static top-down view of the football field through perspective transformation. It produces processed output videos with rich visualizations, enabling insights into match dynamics, all built in a clean, well-defined structure
+This project presents a modular, end-to-end computer vision pipeline for analyzing football videos using YOLOv11, OpenCV, and advanced tracking algorithms. The system performs player detection, draw bounding boxes around players, assigns player teams using jersey color clustering, estimates player speed and distance, and maps player movements onto a static top-down view of the football field through perspective transformation. We also performed camera movement estimation by tracking the features from the frames. Overall, we produced processed output videos with rich visualizations, enabling insights into match dynamics, all built in a clean, well-defined structure
 
 ---
 
-### 📽 Demo
-<img src="output_videos/output.gif" alt="Demo GIF" width="600"/>
+## Demo
+
 
 ---
 
@@ -44,7 +44,7 @@ This project presents a modular, end-to-end computer vision pipeline for analyzi
 ```
 ---
 
-##  Features
+## Features
 
 -  **Object Detection**: Uses fine-tuned YOLOv11 to detect players, referees, and the ball.
 -  **Tracking**: Assigns consistent IDs across frames using supervised trackers.
@@ -55,18 +55,18 @@ This project presents a modular, end-to-end computer vision pipeline for analyzi
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
-- [YOLOv11](https://github.com/WongKinYiu/yolov7)
+- [YOLOv11]
 - [OpenCV](https://opencv.org/)
 - [Python](https://www.python.org/)
 - [Roboflow](https://roboflow.com/)
-- [Scikit-learn (k-means clustering)](https://scikit-learn.org/)
+- [Scikit-learn (k-means clustering)]
 - [NumPy](https://numpy.org/)
 
 ---
 
-##  Setup Instructions
+## Setup Instructions
 
 1. **Clone the Repository**
 
@@ -100,7 +100,7 @@ python main.py
 
 ---
 
-##  Results
+## Results
 
 *  High accuracy in player detection and tracking.
 *  Real-time distance and speed metrics rendered on the video.
@@ -110,13 +110,13 @@ python main.py
 ---
 
 
-##  Limitations
+## Limitations
 
 *  Limited real-time capability on non-GPU machines.
 *  Ball detection is less reliable.
 *  Model performance constrained by dataset quality and size.
 
-##  Future Directions
+## Future Directions
 
 * Improve ball tracking with interpolation techniques.
 * Extend to real-time live-stream processing.
@@ -124,13 +124,13 @@ python main.py
 
 ---
 
-##  Author
+## Author
 
-**Anil Thapa**
+**Austin Thapa**
 
 ---
 
-##  License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
